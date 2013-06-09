@@ -4,3 +4,6 @@
 /build
 /.classpath
 /.project
+/out
+/.idea
+*.iml
