@@ -1,6 +1,8 @@
 apply plugin : 'java'
 apply plugin : 'war'
+apply plugin : 'eclipse'
 apply plugin : 'eclipse-wtp'
+apply plugin : 'project-report'
 
 repositories {
     mavenCentral()
@@ -23,6 +25,23 @@ dependencies {
     testCompile 'org.mockito:mockito-all:1.9.0'
 }
 
+eclipse {
+  wtp {
+    facet {
+      file {
+        whenMerged { wtpFacet ->
+          def installedJstFacet = wtpFacet.facets.find { facet ->
+            facet.name == 'jst.web' && facet.type == org.gradle.plugins.ide.eclipse.model.Facet.FacetType.installed
+          }
+          installedJstFacet.version = '3.0'
+        }
+      }
+    }
+  }
+}
+
+
+
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.4'
+    gradleVersion = '1.6'
 }
