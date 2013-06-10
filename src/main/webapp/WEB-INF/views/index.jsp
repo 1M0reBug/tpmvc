@@ -15,7 +15,8 @@
         <tr>
             <th>Titre</th>
             <th>Artiste</th>
-            <th>Type</th>        
+            <th>Type</th>
+            <th>API</th>
         </tr>
     </thead>
     <tbody>
@@ -26,10 +27,14 @@
                              </spring:url>"><c:out value="${spectacle.titre}"/></a></td>
                 <td><c:out value="${spectacle.artiste}"/></td>
                 <td><c:out value="${spectacle.type}"/></td>
+                <td><a href="<spring:url value='/api/spectacle/{id}'>
+                                 <spring:param name="id" value="${spectacle.id}"/>
+                             </spring:url>">API</a></td>
             </tr>
         </c:forEach>
     </tbody>
 </table>
 <a href="<spring:url value='/spectacle/create'/>">Nouveau spectacle</a>
+
 </body>
 </html>

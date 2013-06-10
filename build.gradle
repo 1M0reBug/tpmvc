@@ -20,6 +20,7 @@ dependencies {
         transitive = false
     }
     compile 'org.hsqldb:hsqldb:2.2.9'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.12'
     
     testCompile 'junit:junit:4.+'
     testCompile 'org.mockito:mockito-all:1.9.0'
