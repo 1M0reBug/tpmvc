@@ -32,12 +32,6 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class AppConfig extends WebMvcConfigurerAdapter {
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // only serve files in "/assets" directory, not in subfolders
-        registry.addResourceHandler("/assets/**").addResourceLocations("/assets/");
-    }
-
     @Bean
     public ViewResolver viewResolver() {
         UrlBasedViewResolver resolver = new UrlBasedViewResolver();
