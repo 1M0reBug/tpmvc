@@ -1,7 +1,5 @@
 package com.ninja_squad.tpmvc;
 
-import javax.sql.DataSource;
-
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +16,11 @@ import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+
+import javax.sql.DataSource;
 
 /**
  * Spring webapp configuration
@@ -34,6 +31,13 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 @EnableWebMvc
 @EnableTransactionManagement
 public class AppConfig extends WebMvcConfigurerAdapter {
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // only serve files in "/assets" directory, not in subfolders
+        registry.addResourceHandler("/assets/**").addResourceLocations("/assets/");
+    }
+
     @Bean
     public ViewResolver viewResolver() {
         UrlBasedViewResolver resolver = new UrlBasedViewResolver();
