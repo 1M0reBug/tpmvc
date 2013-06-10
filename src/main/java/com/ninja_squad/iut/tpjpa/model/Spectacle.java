@@ -85,4 +85,26 @@ public class Spectacle {
 	public long getVersion() {
 		return version;
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Spectacle)) return false;
+
+        Spectacle spectacle = (Spectacle) o;
+
+        if (artiste != null ? !artiste.equals(spectacle.artiste) : spectacle.artiste != null) return false;
+        if (titre != null ? !titre.equals(spectacle.titre) : spectacle.titre != null) return false;
+        if (type != spectacle.type) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = titre != null ? titre.hashCode() : 0;
+        result = 31 * result + (artiste != null ? artiste.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
+    }
 }

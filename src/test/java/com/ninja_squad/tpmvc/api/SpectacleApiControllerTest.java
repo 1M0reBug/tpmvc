@@ -1,6 +1,7 @@
 package com.ninja_squad.tpmvc.api;
 
 import com.google.common.collect.Lists;
+import com.ninja_squad.iut.tpjpa.model.Representation;
 import com.ninja_squad.iut.tpjpa.model.Spectacle;
 import com.ninja_squad.iut.tpjpa.model.TypeDeSpectacle;
 import com.ninja_squad.iut.tpjpa.service.SpectacleService;
@@ -22,9 +23,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.Date;
 import java.util.List;
 
+import static org.mockito.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,7 +48,7 @@ public class SpectacleApiControllerTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        Mockito.reset(mockSpectacleService);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
     }
 
@@ -69,15 +73,97 @@ public class SpectacleApiControllerTest {
         final Long id = -1L;
         final Spectacle spectacle = new Spectacle("titre du spectacle", "nom de l'artiste", TypeDeSpectacle.CONCERT);
 
-        Mockito.when(mockSpectacleService.findById(Matchers.eq(id))).thenReturn(spectacle);
+        Mockito.when(mockSpectacleService.findById(eq(id))).thenReturn(spectacle);
 
         mockMvc.perform(get("/api/spectacles/{id}", id)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("titre").value("titre du spectacle"))
-                .andExpect(jsonPath("artiste").value("nom de l'artiste"))
+                .andExpect(jsonPath("titre").value(spectacle.getTitre()))
+                .andExpect(jsonPath("artiste").value(spectacle.getArtiste()))
+                .andExpect(jsonPath("type").value(spectacle.getType().name()));
+    }
+
+    @Test
+    public void representations() throws Exception {
+        final Long id = -1L;
+        final Spectacle spectacle = new Spectacle("titre du spectacle", "nom de l'artiste", TypeDeSpectacle.CONCERT);
+        spectacle.addRepresentation(new Representation(new Date()));
+        spectacle.addRepresentation(new Representation(new Date()));
+        spectacle.addRepresentation(new Representation(new Date()));
+
+        Mockito.when(mockSpectacleService.findById(Matchers.eq(id))).thenReturn(spectacle);
+
+        mockMvc.perform(get("/api/spectacles/{id}/representations", id)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    public void create() throws Exception {
+        final Spectacle spectacle = new Spectacle("titre du spectacle", "nom de l'artiste", TypeDeSpectacle.CONCERT);
+
+        Mockito.when(mockSpectacleService.createSpectacle(eq(spectacle))).thenReturn(spectacle);
+
+        mockMvc.perform(
+                post("/api/spectacles/")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("titre", spectacle.getTitre())
+                        .param("artiste", spectacle.getArtiste())
+                        .param("type", spectacle.getType().name()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("titre").value(spectacle.getTitre()))
+                .andExpect(jsonPath("artiste").value(spectacle.getArtiste()))
                 .andExpect(jsonPath("type").value("CONCERT"));
+
+        Mockito.verify(mockSpectacleService).createSpectacle(eq(spectacle));
+    }
+
+    @Test
+    public void create_missingTitre() throws Exception {
+        mockMvc.perform(
+                post("/api/spectacles/")
+                        .accept(MediaType.APPLICATION_JSON)
+                                //.param("titre", "test")
+                        .param("artiste", "test")
+                        .param("type", "test")
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        Mockito.verify(mockSpectacleService, Mockito.never()).createSpectacle(any(Spectacle.class));
+    }
+
+    @Test
+    public void create_missingArtiste() throws Exception {
+        mockMvc.perform(
+                post("/api/spectacles/")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("titre", "test")
+                                //.param("artiste", "test")
+                        .param("type", "test")
+        )
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        Mockito.verify(mockSpectacleService, Mockito.never()).createSpectacle(any(Spectacle.class));
+    }
+
+    @Test
+    public void create_missingType() throws Exception {
+        mockMvc.perform(
+                post("/api/spectacles/")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("titre", "test")
+                        .param("artiste", "test")
+                        //.param("type", "test")
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        Mockito.verify(mockSpectacleService, Mockito.never()).createSpectacle(any(Spectacle.class));
     }
 
     @Configuration

@@ -29,7 +29,14 @@ public class Representation {
 	@JoinColumn(name = "id_spectacle", nullable = false)
 	private Spectacle spectacle;
 
-	public Long getId() {
+    public Representation() {
+    }
+
+    public Representation(Date date) {
+        this.date = date;
+    }
+
+    public Long getId() {
 		return id;
 	}
 
