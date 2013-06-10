@@ -1,14 +1,14 @@
 package com.ninja_squad.tpmvc;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRegistration;
-
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration;
+
 /**
- * Cette classe joue le rôle du web.xml, mais en Java. Elle permet de configurer le servlet de Spring
+ * Cette classe joue le rÃ´le du web.xml, mais en Java. Elle permet de configurer le servlet de Spring
  * (DispatcherServlet)
  * @author JB
  */
