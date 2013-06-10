@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 /**
  * Entity implementation class for Entity: Spectacle
  */
@@ -33,6 +35,7 @@ public class Spectacle {
 	private TypeDeSpectacle type;
 
 	@OneToMany(mappedBy = "spectacle")
+    @JsonIgnore
 	private Set<Representation> representations = new HashSet<Representation>(0);
 
 	@Version
