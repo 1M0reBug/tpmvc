@@ -23,7 +23,7 @@ var showSpectacle = function (spectacle) {
 };
 
 var list = function () {
-    $.getJSON("http://localhost:8080/tpmvc/api/spectacles", function (data) {
+    $.getJSON("http://localhost:8080/tpmvc/api/spectacles/", function (data) {
         showSpectacles(data);
     });
     /*
