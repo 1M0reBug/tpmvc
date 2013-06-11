@@ -43,7 +43,7 @@ public class SpectacleApiController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public @ResponseBody Spectacle create(@ModelAttribute Spectacle spectacle, BindingResult bindingResult) {
+    public @ResponseBody Spectacle create(Spectacle spectacle, BindingResult bindingResult) {
         ValidationUtils.rejectIfEmpty(bindingResult, "titre", "titre.empty");
         ValidationUtils.rejectIfEmpty(bindingResult, "artiste", "artiste.empty");
         ValidationUtils.rejectIfEmpty(bindingResult, "type", "type.empty");
